@@ -8,12 +8,15 @@ const COMPONENT_SELECTOR = '[data-el="home-hero-slider"]';
 const SLIDE_SELECTOR = '[data-el="home-hero-slider-slide"]';
 const TABS_COMPONENT_SELECTOR = '[data-el="home-hero-slider-tabs"]';
 const TAB_ITEM_SELECTOR = '[data-el="home-hero-slider-tab-item"]';
+const TAB_ITEM_CLASSNAME = 'home-hero_slides_tab-item';
 
 // Slide item selectors
 const SLIDE_ITEM_BG_SELECTOR = '.home-hero_slides_item-image';
 const SLIDE_ITEM_TITLE_SELECTOR = '.home-hero_slides_item-heading';
 const SLIDE_ITEM_TEXT_SELECTOR = '.home-hero_slides_item-description';
 const SLIDE_ITEM_BUTTON_SELECTOR = '.button_component';
+
+const AUTOPLAY_DURATION_MS = 5000;
 
 class HomeHeroSlider {
   swiperEl: HTMLElement | null;
@@ -43,30 +46,39 @@ class HomeHeroSlider {
 
     if (!this.swiperEl || !this.tabItems || !this.slides) return;
 
+    const allTabItems: string[] = [];
+    this.tabItems.forEach((tab, i) => {
+      allTabItems.push(tab.textContent ?? `Slide ${i + 1}`);
+    });
+
+    // Initial first slide gsap reset
+    this.resetNonActiveSlides();
+
     // Swiper init
     this.swiper = new Swiper(this.swiperEl, {
-      modules: [Pagination, Autoplay, A11y, EffectFade],
+      modules: [Autoplay, A11y, EffectFade, Pagination],
       effect: 'fade',
       fadeEffect: { crossFade: true },
       speed: 900,
       loop: false,
       autoplay: {
-        delay: 5000,
+        delay: AUTOPLAY_DURATION_MS,
         disableOnInteraction: false,
+      },
+      a11y: {
+        enabled: true,
       },
       pagination: {
         el: this.tabsList,
         clickable: true,
-        type: 'custom',
-        renderCustom: (swiper: any, current: number, total: number) => {
-          // Add is-active class to the correct tab
-          this.tabItems?.forEach((tab, idx) => {
-            tab.classList.toggle('is-active', idx === current - 1);
-          });
-          return '';
+        renderBullet: (index, className) => {
+          const tabText = allTabItems[index] || `Slide ${index + 1}`;
+          return `<button class="${className}">${tabText}</button>`;
         },
+        bulletClass: TAB_ITEM_CLASSNAME,
+        bulletElement: 'button',
+        bulletActiveClass: 'is-active',
       },
-      a11y: {},
       on: {
         init: () => {
           this.animateSlide(this.swiper?.activeIndex ?? 0);
@@ -74,14 +86,10 @@ class HomeHeroSlider {
         slideChangeTransitionStart: () => {
           this.animateSlide(this.swiper?.activeIndex ?? 0);
         },
+        slideChangeTransitionEnd: () => {
+          this.resetNonActiveSlides(this.swiper?.activeIndex ?? 0);
+        },
       },
-    });
-
-    // Tab click events (Swiper handles clickable, but for safety)
-    this.tabItems.forEach((tab, idx) => {
-      tab.addEventListener('click', () => {
-        this.swiper?.slideTo(idx);
-      });
     });
   }
 
@@ -90,51 +98,49 @@ class HomeHeroSlider {
     const slide = this.slides?.[index];
     if (!slide) return;
 
-    // Select elements (adjust selectors as needed)
-    const bg = slide.querySelector(SLIDE_ITEM_BG_SELECTOR);
-    const title = slide.querySelector(SLIDE_ITEM_TITLE_SELECTOR);
-    const text = slide.querySelector(SLIDE_ITEM_TEXT_SELECTOR);
-    const button = slide.querySelector(SLIDE_ITEM_BUTTON_SELECTOR);
+    const slideContext = gsap.context((ctx) => {
+      // Only animate the incoming slide, do not reset others here
+      gsap.to(SLIDE_ITEM_BG_SELECTOR, {
+        scale: 1.08,
+        opacity: 1,
+        duration: AUTOPLAY_DURATION_MS / 1000,
+        ease: 'power2.out',
+      });
+      gsap.to(SLIDE_ITEM_TITLE_SELECTOR, {
+        y: 0,
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power3.out',
+        delay: 0.3,
+      });
+      gsap.to(SLIDE_ITEM_TEXT_SELECTOR, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power3.out',
+        delay: 1,
+      });
+      gsap.to(SLIDE_ITEM_BUTTON_SELECTOR, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power3.out',
+        delay: 1.2,
+      });
+    }, slide);
 
-    // Reset all animations
+    return () => slideContext.revert();
+  }
+
+  resetNonActiveSlides(activeIdx: number | null = null) {
     this.slides?.forEach((s, i) => {
-      if (i !== index) {
+      if (!activeIdx || i !== activeIdx) {
         gsap.set(s.querySelector(SLIDE_ITEM_BG_SELECTOR), { scale: 1, opacity: 1 });
         gsap.set(s.querySelector(SLIDE_ITEM_TITLE_SELECTOR), { y: 60, opacity: 0 });
         gsap.set(s.querySelector(SLIDE_ITEM_TEXT_SELECTOR), { y: 40, opacity: 0 });
         gsap.set(s.querySelector(SLIDE_ITEM_BUTTON_SELECTOR), { y: 40, opacity: 0 });
       }
     });
-
-    // Animate in
-    if (bg) {
-      gsap.fromTo(
-        bg,
-        { scale: 1, opacity: 1 },
-        { scale: 1.08, opacity: 1, duration: 5, ease: 'power2.out' }
-      );
-    }
-    if (title) {
-      gsap.fromTo(
-        title,
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1 }
-      );
-    }
-    if (text) {
-      gsap.fromTo(
-        text,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.4 }
-      );
-    }
-    if (button) {
-      gsap.fromTo(
-        button,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.6 }
-      );
-    }
   }
 }
 
