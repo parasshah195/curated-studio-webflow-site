@@ -1,7 +1,7 @@
 import Swiper from 'swiper';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/pagination';
+// import 'swiper/css';
+// import 'swiper/css/effect-fade';
+// import 'swiper/css/pagination';
 import { Autoplay, A11y, EffectFade, Pagination } from 'swiper/modules';
 
 const COMPONENT_SELECTOR = '[data-el="home-hero-slider"]';

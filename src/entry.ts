@@ -16,7 +16,8 @@ interface ScriptOptions {
   scriptName?: string;
 }
 
-window.PRODUCTION_BASE = 'https://cdn.jsdelivr.net/gh/parasshah195/curated-studio-webflow-site/dist/prod/';
+window.PRODUCTION_BASE =
+  'https://cdn.jsdelivr.net/gh/parasshah195/curated-studio-webflow-site/dist/prod/';
 const relativePathBase = window.SCRIPTS_ENV === 'local' ? LOCAL_SERVER : window.PRODUCTION_BASE;
 
 /**
