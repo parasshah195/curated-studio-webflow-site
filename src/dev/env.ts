@@ -6,7 +6,7 @@ export const ENV_NAMES: Record<SCRIPTS_ENV, string> = {
   cdn: 'CDN',
 };
 
-export const LOCAL_SERVER = 'http://localhost:3000';
+export const LOCAL_SERVER = 'http://localhost:3000/';
 const ENV_LOCALSTORAGE_ID = 'jsEnv';
 
 window.SCRIPTS_ENV = getENV();
@@ -14,7 +14,7 @@ window.SCRIPTS_ENV = getENV();
 window.setScriptMode = (env) => {
   if (env !== 'local' && env !== 'cdn') {
     console.error(
-      'Invalid environment. Pass %c`local`%c or %c`cdn`%c in the console',
+      'Invalid JS scripts environment. Pass %c`local`%c or %c`cdn`%c in the console',
       CONSOLE_STYLES.highlight,
       CONSOLE_STYLES.normal,
       CONSOLE_STYLES.highlight,
@@ -26,7 +26,10 @@ window.setScriptMode = (env) => {
   localStorage.setItem(ENV_LOCALSTORAGE_ID, env);
   window.SCRIPTS_ENV = env;
 
-  console.log(`Environment successfully set to %c${ENV_NAMES[env]}`, CONSOLE_STYLES.highlight);
+  console.log(
+    `JS scripts environment successfully set to %c${ENV_NAMES[env]}`,
+    CONSOLE_STYLES.highlight
+  );
 };
 
 function getENV(): SCRIPTS_ENV {
@@ -45,13 +48,18 @@ function getENV(): SCRIPTS_ENV {
       .finally(() => clearTimeout(timeout));
   }
 
-  return localStorageItem || 'cdn';
+  const env = localStorageItem || 'cdn';
+
+  console.log(`Current JS scripts environment: %c${env}`, CONSOLE_STYLES.highlight);
+  outputEnvSwitchLog(env);
+
+  return env;
 }
 
 export function outputEnvSwitchLog(env: SCRIPTS_ENV) {
   if ('cdn' === env) {
     console.log(
-      'To switch to dev mode and serve files from localhost, run %c`window.setScriptsENV("local")`%c in the console',
+      'To serve JS files from localhost, run %c`window.setScriptsENV("local")`%c in the console',
       CONSOLE_STYLES.highlight,
       CONSOLE_STYLES.normal
     );
