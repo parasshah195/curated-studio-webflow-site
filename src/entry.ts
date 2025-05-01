@@ -35,7 +35,7 @@ const relativePathBase = window.SCRIPTS_ENV === 'local' ? LOCAL_SERVER : window.
  * @returns A promise that resolves when the script is loaded
  */
 window.loadScript = function (url, options): Promise<void> {
-  const opts: ScriptOptions = { placement: 'body', isModule: true, defer: true, ...options };
+  const opts: ScriptOptions = { placement: 'body', isModule: false, defer: true, ...options };
 
   // Work with both relative repo paths and direct CDN URLs
   const isAbsolute = url.startsWith('https://');
