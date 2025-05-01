@@ -1,5 +1,6 @@
 import type { Webflow } from '@finsweet/ts-utils';
 import type GSAP from 'gsap';
+import type ScrollSmoother from 'gsap/ScrollSmoother';
 import type ScrollTrigger from 'gsap/ScrollTrigger';
 
 import type { SCRIPTS_ENV } from '$dev/env';
@@ -8,6 +9,7 @@ declare global {
   /** GSAP and sub-libs loading from Webflow CDN */
   gsap: GSAP;
   ScrollTrigger: typeof ScrollTrigger;
+  ScrollSmoother: typeof ScrollSmoother;
 
   interface Window {
     Webflow: Webflow;
@@ -21,6 +23,9 @@ declare global {
     PRODUCTION_BASE: string;
 
     loadScript: (url: string, options?: ScriptOptions) => Promise<void>;
+
+    // Custom Scripts
+    smoother: ScrollSmoother;
   }
 
   // Extend `querySelector` and `querySelectorAll` function to stop the nagging of converting `Element` to `HTMLElement` all the time
