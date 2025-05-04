@@ -5,7 +5,7 @@ import { toggleNavColor } from './components/nav';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
   gsap.defaults({ ease: 'power3.out' });
 
   toggleNavColor();

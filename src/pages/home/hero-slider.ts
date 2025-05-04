@@ -36,6 +36,8 @@ class HomeHeroSlider {
     this.swiper = null;
     this.headingSplits = [];
 
+    gsap.registerPlugin(SplitText);
+
     document.fonts.ready.then(() => {
       this.initSplitText();
       this.initSlides();
