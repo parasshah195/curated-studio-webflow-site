@@ -2,6 +2,7 @@ import type { Webflow } from '@finsweet/ts-utils';
 import type GSAP from 'gsap';
 import type ScrollSmoother from 'gsap/ScrollSmoother';
 import type ScrollTrigger from 'gsap/ScrollTrigger';
+import type SplitText from 'gsap/SplitText';
 
 import type { SCRIPTS_ENV } from '$dev/env';
 
@@ -9,6 +10,7 @@ declare global {
   /** GSAP and sub-libs loading from Webflow CDN */
   gsap: GSAP;
   ScrollTrigger: typeof ScrollTrigger;
+  SplitText: typeof SplitText;
   ScrollSmoother: typeof ScrollSmoother;
 
   interface Window {

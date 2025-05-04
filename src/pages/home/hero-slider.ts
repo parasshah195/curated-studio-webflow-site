@@ -1,3 +1,4 @@
+import { GSAP_SPLIT_LINES_CLASSNAME } from 'src/constants';
 import Swiper from 'swiper';
 import { Autoplay, A11y, EffectFade, Pagination } from 'swiper/modules';
 
@@ -22,18 +23,9 @@ class HomeHeroSlider {
   tabItems: NodeListOf<HTMLElement> | null;
   slides: NodeListOf<HTMLElement> | null;
   swiper: Swiper | null;
+  headingSplits: SplitText[];
 
   constructor() {
-    this.swiperEl = null;
-    this.tabsComponent = null;
-    this.tabsList = null;
-    this.tabItems = null;
-    this.slides = null;
-    this.swiper = null;
-    this.init();
-  }
-
-  init() {
     // Selectors
     this.swiperEl = document.querySelector(COMPONENT_SELECTOR);
     this.tabsComponent = this.swiperEl?.querySelector(TABS_COMPONENT_SELECTOR) ?? null;
@@ -41,6 +33,29 @@ class HomeHeroSlider {
     this.tabItems = this.tabsList?.querySelectorAll(TAB_ITEM_SELECTOR) ?? null;
     this.slides = this.swiperEl?.querySelectorAll(SLIDE_SELECTOR) ?? null;
 
+    this.swiper = null;
+    this.headingSplits = [];
+
+    document.fonts.ready.then(() => {
+      this.initSplitText();
+      this.initSlides();
+    });
+  }
+
+  initSplitText() {
+    document.querySelectorAll(SLIDE_SELECTOR).forEach((slide) => {
+      const title = slide.querySelector(SLIDE_ITEM_TITLE_SELECTOR);
+      if (!title) return;
+
+      const split = SplitText.create(title, {
+        type: 'lines',
+        mask: 'lines',
+      });
+      this.headingSplits.push(split);
+    });
+  }
+
+  initSlides() {
     if (!this.swiperEl || !this.tabItems || !this.slides) return;
 
     const allTabItems: string[] = [];
@@ -95,47 +110,49 @@ class HomeHeroSlider {
     const slide = this.slides?.[index];
     if (!slide) return;
 
-    const slideContext = gsap.context((ctx) => {
-      // Only animate the incoming slide, do not reset others here
-      gsap.to(SLIDE_ITEM_BG_SELECTOR, {
-        scale: 1.08,
-        opacity: 1,
-        duration: AUTOPLAY_DURATION_MS / 1000,
-        ease: 'power2.out',
-      });
-      gsap.to(SLIDE_ITEM_TITLE_SELECTOR, {
-        y: 0,
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power3.out',
-        delay: 0.3,
-      });
-      gsap.to(SLIDE_ITEM_TEXT_SELECTOR, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power3.out',
-        delay: 1,
-      });
-      gsap.to(SLIDE_ITEM_BUTTON_SELECTOR, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power3.out',
-        delay: 1.2,
-      });
-    }, slide);
+    const tl = gsap.timeline({
+      context: slide,
+    });
 
-    return () => slideContext.revert();
+    // Only animate the incoming slide, do not reset others here
+    tl.to(SLIDE_ITEM_BG_SELECTOR, {
+      scale: 1.08,
+      opacity: 1,
+      duration: AUTOPLAY_DURATION_MS / 1000,
+      ease: 'power2.out',
+    })
+      .to(
+        this.headingSplits[index].lines,
+        {
+          yPercent: 0,
+          scale: 1,
+          opacity: 1,
+          stagger: 0.25,
+          ease: 'power1.out',
+        },
+        '<+0.4'
+      )
+      .to(
+        [SLIDE_ITEM_TEXT_SELECTOR, SLIDE_ITEM_BUTTON_SELECTOR],
+        {
+          opacity: 1,
+          duration: 1,
+        },
+        '>0.5'
+      );
   }
 
   resetNonActiveSlides(activeIdx: number | null = null) {
     this.slides?.forEach((s, i) => {
       if (!activeIdx || i !== activeIdx) {
         gsap.set(s.querySelector(SLIDE_ITEM_BG_SELECTOR), { scale: 1, opacity: 1 });
-        gsap.set(s.querySelector(SLIDE_ITEM_TITLE_SELECTOR), { y: 60, opacity: 0 });
-        gsap.set(s.querySelector(SLIDE_ITEM_TEXT_SELECTOR), { y: 40, opacity: 0 });
-        gsap.set(s.querySelector(SLIDE_ITEM_BUTTON_SELECTOR), { y: 40, opacity: 0 });
+        gsap.set(this.headingSplits[i].lines, {
+          yPercent: 100,
+          scale: 1.1,
+          opacity: 0,
+        });
+        gsap.set(s.querySelector(SLIDE_ITEM_TEXT_SELECTOR), { opacity: 0 });
+        gsap.set(s.querySelector(SLIDE_ITEM_BUTTON_SELECTOR), { opacity: 0 });
       }
     });
   }
