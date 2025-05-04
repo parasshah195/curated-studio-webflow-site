@@ -110,36 +110,46 @@ class HomeHeroSlider {
     const slide = this.slides?.[index];
     if (!slide) return;
 
-    const tl = gsap.timeline({
-      context: slide,
-    });
+    const tl = gsap.timeline();
 
-    // Only animate the incoming slide, do not reset others here
-    tl.to(SLIDE_ITEM_BG_SELECTOR, {
-      scale: 1.08,
-      opacity: 1,
-      duration: AUTOPLAY_DURATION_MS / 1000,
-      ease: 'power2.out',
-    })
-      .to(
-        this.headingSplits[index].lines,
-        {
-          yPercent: 0,
-          scale: 1,
-          opacity: 1,
-          stagger: 0.25,
-          ease: 'power1.out',
-        },
-        '<+0.4'
-      )
-      .to(
-        [SLIDE_ITEM_TEXT_SELECTOR, SLIDE_ITEM_BUTTON_SELECTOR],
-        {
-          opacity: 1,
-          duration: 1,
-        },
-        '>0.5'
-      );
+    let ctx = gsap.context((ctx) => {
+      // Only animate the incoming slide, do not reset others here
+      tl.to(SLIDE_ITEM_BG_SELECTOR, {
+        scale: 1.08,
+        opacity: 1,
+        duration: AUTOPLAY_DURATION_MS / 1000,
+        ease: 'power2.out',
+      })
+        .to(
+          this.headingSplits[index].lines,
+          {
+            yPercent: 0,
+            scale: 1,
+            opacity: 1,
+            stagger: 0.25,
+            ease: 'power1.out',
+          },
+          '<+0.4'
+        )
+        .to(
+          SLIDE_ITEM_TEXT_SELECTOR,
+          {
+            opacity: 1,
+            duration: 1,
+          },
+          '>0.5'
+        )
+        .to(
+          SLIDE_ITEM_BUTTON_SELECTOR,
+          {
+            opacity: 1,
+            duration: 1,
+          },
+          '<'
+        );
+    }, slide);
+
+    return () => ctx.revert();
   }
 
   resetNonActiveSlides(activeIdx: number | null = null) {
