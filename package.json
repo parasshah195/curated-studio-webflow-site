@@ -23,6 +23,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.6",
+    "gsap": "^3.13.0",
     "path": "^0.12.7",
     "prettier": "^3.5.3",
     "tiny-glob": "^0.2.9",
@@ -30,7 +31,6 @@
   },
   "dependencies": {
     "@finsweet/ts-utils": "^0.40.0",
-    "gsap": "^3.12.7",
     "swiper": "^11.2.6"
   }
 }
