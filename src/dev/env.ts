@@ -59,13 +59,13 @@ function getENV(): SCRIPTS_ENV {
 export function outputEnvSwitchLog(env: SCRIPTS_ENV) {
   if ('cdn' === env) {
     console.log(
-      'To serve JS files from localhost, run %c`window.setScriptsENV("local")`%c in the console',
+      'To serve JS files from localhost, run %c`window.setScriptMode("local")`%c in the console',
       CONSOLE_STYLES.highlight,
       CONSOLE_STYLES.normal
     );
   } else {
     console.log(
-      'To switch to production mode, either run %c`window.setScriptsENV("cdn")`%c in the console or turn off localhost dev server',
+      'To switch to production mode, either run %c`window.setScriptMode("cdn")`%c in the console or turn off localhost dev server',
       CONSOLE_STYLES.highlight,
       CONSOLE_STYLES.normal
     );
