@@ -1,3 +1,7 @@
+/**
+ * Injects Webflow lightbox script JSON for component products
+ */
+
 const PRODUCT_ITEM_LIGHTBOX_SELECTOR = '[data-lightbox-el="product-item"]';
 
 document.addEventListener('DOMContentLoaded', () => {
