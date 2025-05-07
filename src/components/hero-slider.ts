@@ -1,22 +1,21 @@
-import { GSAP_SPLIT_LINES_CLASSNAME } from 'src/constants';
 import Swiper from 'swiper';
 import { Autoplay, A11y, EffectFade, Pagination } from 'swiper/modules';
 
-const COMPONENT_SELECTOR = '[data-el="home-hero-slider"]';
-const SLIDE_SELECTOR = '[data-el="home-hero-slider-slide"]';
-const TABS_COMPONENT_SELECTOR = '[data-el="home-hero-slider-tabs"]';
-const TAB_ITEM_SELECTOR = '[data-el="home-hero-slider-tab-item"]';
-const TAB_ITEM_CLASSNAME = 'home-hero_slides_tab-item';
+const COMPONENT_SELECTOR = '[data-el="hero-slider"]';
+const SLIDE_SELECTOR = '[data-el="hero-slider-slide"]';
+const TABS_COMPONENT_SELECTOR = '[data-el="hero-slider-tabs"]';
+const TAB_ITEM_SELECTOR = '[data-el="hero-slider-tab-item"]';
+const TAB_ITEM_CLASSNAME = 'hero_slides_tab-item';
 
 // Slide item selectors
-const SLIDE_ITEM_BG_SELECTOR = '.home-hero_slides_item-image';
-const SLIDE_ITEM_TITLE_SELECTOR = '.home-hero_slides_item-heading';
-const SLIDE_ITEM_TEXT_SELECTOR = '.home-hero_slides_item-description';
+const SLIDE_ITEM_BG_SELECTOR = '.hero_slides_item-image';
+const SLIDE_ITEM_TITLE_SELECTOR = '.hero_slides_item-heading';
+const SLIDE_ITEM_TEXT_SELECTOR = '.hero_slides_item-description';
 const SLIDE_ITEM_BUTTON_SELECTOR = '.button_component';
 
 const AUTOPLAY_DURATION_MS = 5000;
 
-class HomeHeroSlider {
+class HeroSlider {
   swiperEl: HTMLElement | null;
   tabsComponent: HTMLElement | null;
   tabsList: HTMLElement | null;
@@ -173,5 +172,5 @@ class HomeHeroSlider {
 // Auto-init on DOMContentLoaded
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  new HomeHeroSlider();
+  new HeroSlider();
 });
