@@ -1,5 +1,6 @@
 // Global dialog popup
 import '$components/dialog';
+import { ProductItem } from '$components/product-item';
 import { setCurrentYear } from '$utils/current-year';
 // Global scroll smoother
 import '$utils/scroll-smoother';
@@ -14,4 +15,6 @@ window.Webflow.push(() => {
   toggleNavColor();
 
   setCurrentYear();
+
+  new ProductItem();
 });
