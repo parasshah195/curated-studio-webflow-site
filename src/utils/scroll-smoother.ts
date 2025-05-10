@@ -9,7 +9,7 @@ window.Webflow.push(() => {
 function setupScrollSmoother() {
   window.smoother = ScrollSmoother.create({
     wrapper: '.page-wrapper',
-    content: '.main-wrapper',
+    content: '.scrollsmoother-content-wrapper',
     smooth: 1,
     effects: true,
   });
