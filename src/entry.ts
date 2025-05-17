@@ -9,11 +9,13 @@ import { LOCAL_SERVER } from '$dev/env';
  */
 
 // Add ScriptOptions and ScriptListItem types for global use
-interface ScriptOptions {
-  placement: 'head' | 'body';
-  defer: boolean;
-  isModule: boolean;
-  scriptName?: string;
+export interface ScriptOptions {
+  placement?: 'head' | 'body';
+  defer?: boolean;
+  isModule?: boolean;
+  name?: string;
+  // allow any other new option name here
+  [key: string]: unknown;
 }
 
 window.PRODUCTION_BASE =
@@ -27,15 +29,25 @@ const relativePathBase = window.SCRIPTS_ENV === 'local' ? LOCAL_SERVER : window.
  * window.loadScript('global.js');
  * window.loadScript('https://cdn.jsdelivr.net/npm/some-lib@1.0.0/dist/index.js', {
  *   placement: 'head',
- *   scriptName: 'some-lib',
+ *   name: 'some-lib',
  * });
  * ```
  * @param url - The URL of the script to load
  * @param options - The options for the script
+ * @param attr - Any other attributes to add to the script element
  * @returns A promise that resolves when the script is loaded
  */
-window.loadScript = function (url, options): Promise<void> {
-  const opts: ScriptOptions = { placement: 'body', isModule: true, defer: true, ...options };
+window.loadScript = function (url, options, attr?: Record<string, string>): Promise<void> {
+  const opts: ScriptOptions = {
+    placement: 'body',
+    name: undefined,
+    ...options,
+  };
+
+  const attributes: Record<string, string> = {
+    defer: 'true',
+    ...attr,
+  };
 
   // Work with both relative repo paths and direct CDN URLs
   const isAbsolute = url.startsWith('https://');
@@ -48,13 +60,14 @@ window.loadScript = function (url, options): Promise<void> {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = finalUrl;
-    if (opts.isModule) script.type = 'module';
-    if (opts.defer) script.defer = true;
+    Object.entries(attributes).forEach(([key, value]) => {
+      script.setAttribute(key, value);
+    });
     script.onload = () => {
-      if (opts.scriptName) {
+      if (opts.name) {
         document.dispatchEvent(
-          new CustomEvent(`scriptLoaded:${opts.scriptName}`, {
-            detail: { url: finalUrl, scriptName: opts.scriptName },
+          new CustomEvent(`scriptLoaded:${opts.name}`, {
+            detail: { url: finalUrl, name: opts.name },
           })
         );
       }
