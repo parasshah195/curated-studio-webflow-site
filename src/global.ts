@@ -13,7 +13,6 @@ window
   })
   .then(() => {
     console.log('Swiper loaded');
-    Swiper.use([Autoplay, A11y, Navigation, EffectFade, Pagination]);
   });
 
 window.Webflow ||= [];

@@ -32,7 +32,6 @@ class Slider {
           : false;
 
       this.swiper = new Swiper(swiperEl, {
-        modules: [A11y, Navigation],
         loop: false,
         spaceBetween: 24,
         slidesPerView: 'auto',
@@ -48,4 +47,7 @@ class Slider {
   }
 }
 
-window.addEventListener('scriptLoaded:swiper', () => new Slider());
+document.addEventListener('scriptLoaded:swiper', () => {
+  console.debug('swiper global slider');
+  new Slider();
+});
