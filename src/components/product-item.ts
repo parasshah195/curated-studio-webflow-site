@@ -18,6 +18,8 @@ export class ProductItem {
       (listInstances) => {
         const [listInstance] = listInstances;
 
+        if (!listInstances.length) return;
+
         listInstance.addHook('beforeRender', () => {
           this.setInitialAnimState(listInstance.items);
         });
@@ -47,8 +49,6 @@ export class ProductItem {
           opacity: 1,
           y: 0,
           stagger: 0.15,
-          duration: 0.6,
-          overwrite: 'auto',
         });
       },
       start: 'top bottom-=100px',
