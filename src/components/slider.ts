@@ -48,6 +48,5 @@ class Slider {
 }
 
 document.addEventListener('scriptLoaded:swiper', () => {
-  console.debug('swiper global slider');
   new Slider();
 });

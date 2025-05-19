@@ -7,13 +7,9 @@ import { setCurrentYear } from '$utils/current-year';
 // Global scroll smoother
 import '$utils/scroll-smoother';
 
-window
-  .loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', {
-    name: 'swiper',
-  })
-  .then(() => {
-    console.log('Swiper loaded');
-  });
+window.loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', {
+  name: 'swiper',
+});
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
