@@ -20,5 +20,28 @@ window.Webflow.push(() => {
 
   setCurrentYear();
 
+  loadFinsweetAttributesScript();
+
   new ProductItem();
 });
+
+/**
+ * Load the Finsweet Attributes script with the `fs-list` attribute.
+ * This is a workaround to load the script after the Shopyflow data is loaded, to allow filtering to work
+ */
+function loadFinsweetAttributesScript() {
+  window.addEventListener('ShopyflowReady', (event) => {
+    setTimeout(() => {
+      window.loadScript(
+        'https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js',
+        {
+          name: 'finsweet-attributes',
+        },
+        {
+          type: 'module',
+          'fs-list': '',
+        }
+      );
+    }, 2000);
+  });
+}
