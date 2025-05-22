@@ -20,13 +20,18 @@ export class ProductItem {
 
         if (!listInstances.length) return;
 
-        listInstance.addHook('render', (items) => {
+        window.IS_DEBUG_MODE && console.debug('listInstance', listInstance);
+
+        listInstance.addHook('beforeRender', (items) => {
           const listItemElList = items.map((item) => item.element);
           this.setInitialAnimState(listItemElList);
         });
 
+        listInstance.addHook('render', () => {
+          window.Shopyflow.fetchNew();
+        });
+
         listInstance.addHook('afterRender', (items) => {
-          // TODO: fix this returning all items in the list on loading more
           const listItemElList = items.map((item) => item.element);
           this.addProductItemAnimation(listItemElList);
         });
