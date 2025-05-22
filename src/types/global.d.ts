@@ -38,7 +38,11 @@ declare global {
 
     PRODUCTION_BASE: string;
 
-    loadScript: (url: string, options?: ScriptOptions) => Promise<void>;
+    loadScript: (
+      url: string,
+      options?: ScriptOptions,
+      attr?: Record<string, string>
+    ) => Promise<void>;
 
     // Custom Scripts
     smoother: ScrollSmoother;
