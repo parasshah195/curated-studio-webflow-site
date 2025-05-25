@@ -11,6 +11,8 @@ window.loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
   name: 'swiper',
 });
 
+loadFinsweetAttributesScript();
+
 window.Webflow ||= [];
 window.Webflow.push(() => {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -20,8 +22,6 @@ window.Webflow.push(() => {
 
   setCurrentYear();
 
-  loadFinsweetAttributesScript();
-
   new ProductItem();
 });
 
@@ -30,18 +30,14 @@ window.Webflow.push(() => {
  * This is a workaround to load the script after the Shopyflow data is loaded, to allow filtering to work
  */
 function loadFinsweetAttributesScript() {
-  window.addEventListener('ShopyflowReady', (event) => {
-    setTimeout(() => {
-      window.loadScript(
-        'https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js',
-        {
-          name: 'finsweet-attributes',
-        },
-        {
-          type: 'module',
-          'fs-list': '',
-        }
-      );
-    }, 2000);
-  });
+  window.loadScript(
+    'https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js',
+    {
+      name: 'finsweet-attributes',
+    },
+    {
+      type: 'module',
+      'fs-list': '',
+    }
+  );
 }
