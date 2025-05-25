@@ -1,1 +1,0 @@
-"use strict";(()=>{var i='[data-lightbox-el="product-item"]';document.addEventListener("DOMContentLoaded",()=>{n()});function n(){document.querySelectorAll(i).forEach(t=>{let e=t.querySelector("img");if(!e)return;let o=e.getAttribute("src"),r=t.querySelector("script");r&&(r.textContent=JSON.stringify({items:[{_id:Math.random().toString(),url:o,type:"image"}],group:""}))})}})();
