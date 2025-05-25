@@ -11,7 +11,12 @@ const productionTarget = browserslistToEsbuild('defaults');
 
 const BUILD_DIRECTORY = !production ? DEV_BUILD_PATH : PROD_BUILD_PATH;
 
-const files = ['./src/entry.ts', './src/global.ts', './src/components/**/*.ts'];
+const files = [
+  './src/entry.ts',
+  './src/global.ts',
+  './src/components/**/*.ts',
+  './src/pages/**/*.ts',
+];
 
 const buildSettings = {
   entryPoints: files,
