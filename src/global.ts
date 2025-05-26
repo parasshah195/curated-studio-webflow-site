@@ -1,4 +1,5 @@
 // Global dialog popup
+import { animatedDetailsAccordions } from '$components/accordions';
 import '$components/dialog';
 import { toggleNavColor } from '$components/nav';
 import { ProductItem } from '$components/product-item';
@@ -20,6 +21,7 @@ window.Webflow.push(() => {
 
   toggleNavColor();
 
+  animatedDetailsAccordions();
   setCurrentYear();
 
   new ProductItem();
