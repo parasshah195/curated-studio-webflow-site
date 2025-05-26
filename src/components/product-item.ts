@@ -59,8 +59,11 @@ export class ProductItem {
           this.addProductItemAnimation(listItemElList);
         });
 
+        // triggers on both filter and load more
         listInstance.addHook('pagination', (items) => {
           if (!items.length) return;
+
+          ScrollTrigger.refresh();
 
           window.Shopyflow.fetchNew().then(() => {
             items.forEach((item) => {
